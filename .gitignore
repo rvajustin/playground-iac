@@ -359,3 +359,4 @@ MigrationBackup/
 .terraform**
 *.tfplan
 **.tfstate.*
+!**/example/**.local.*

@@ -1,0 +1,7 @@
+{
+    "stage": "dev|test|uat|prd|etc...",
+    "appId": "GUID",
+    "password": "string",
+    "tenant": "GUID",
+    "subscriptionId": "GUID"
+}

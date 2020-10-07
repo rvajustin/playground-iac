@@ -20,6 +20,10 @@ variable "resource_prefix" {
     default = "rvaj82"
 }
 
+variable "tenant" {
+    type = string
+}
+
 variable "appId" {
     type = string
 }

@@ -30,3 +30,115 @@ spec:
   - port: 8080
   selector:
     app: golang-api
+---
+
+
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: playground-sample-python-flask-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python-flask-api
+  template:
+    metadata:
+      labels:
+        app: python-flask-api
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: python-flask-api
+        image: crrvaj82.azurecr.io/rvajustin/sample-python-flask-api:latest
+        ports:
+        - containerPort: 8080
+          name: python-flask-api
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-flask-api
+spec:
+  ports:
+  - port: 8080
+  selector:
+    app: python-flask-api
+---
+
+
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: playground-sample-vlang-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vlang-api
+  template:
+    metadata:
+      labels:
+        app: vlang-api
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: vlang-api
+        image: crrvaj82.azurecr.io/rvajustin/sample-vlang-api:latest
+        ports:
+        - containerPort: 8080
+          name: vlang-api
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vlang-api
+spec:
+  ports:
+  - port: 8080
+  selector:
+    app: vlang-api
+---
+
+
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: playground-sample-nodejs-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodejs-api
+  template:
+    metadata:
+      labels:
+        app: nodejs-api
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: nodejs-api
+        image: crrvaj82.azurecr.io/rvajustin/sample-nodejs-express-api:latest
+        ports:
+        - containerPort: 8080
+          name: nodejs-api
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs-api
+spec:
+  ports:
+  - port: 8080
+  selector:
+    app: nodejs-api
+---
