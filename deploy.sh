@@ -1,17 +1,21 @@
-# $ENV should be dev or prd
+# env should be a subdir under environments/
 ENV=$1
-# $ACTION should be init, plan, or apply
+# action should be init, plan, or apply
 ACT=$2
 
-expected_envs=(dev prd)
-expected_acts=(init plan apply destroy deploy)
+VARS_FILE=environments/${ENV}/variables.local.json
+BACKEND_FILE=environments/${ENV}/backend.config
 
-if [[ " ${expected_envs[@]} " =~ " $ENV " ]]; then
-    echo "Running action for ${ENV}..."
-else
-    echo "Invalid environment: ${ENV}"
+# validate the environment
+if [[ ! -d "environments/${ENV}" ]]; then
+    echo "The environment '${ENV}' doesn't exist under environments/ - please check the spelling!"
+    echo "These environments are available:"
+    ls environments/
     exit
 fi
+
+# validate action
+expected_acts=(init plan apply destroy deploy)
 
 if [[ " ${expected_acts[@]} " =~ " $ACT " ]]; then
     echo "Running ${ACT}..."
@@ -20,17 +24,22 @@ else
     exit
 fi
 
+if [[ -f "${BACKEND_FILE}" ]]; then
+    touch ${BACKEND_FILE}
+fi
+
 if [[ " ${ACT} " =~ " init " ]]; then
-    sh tf.sh ${ENV} init
+    terraform init -backend-config=${BACKEND_FILE} .
+
     
 elif [[ " ${ACT} " =~ " plan " ]]; then
-    sh tf.sh ${ENV} plan --out main.tfplan
+    terraform plan --out main.tfplan -var-file=${VARS_FILE}
     
 elif [[ " ${ACT} " =~ " apply " ]]; then
     terraform apply main.tfplan 
     
 elif [[ " ${ACT} " =~ " destroy " ]]; then
-    sh tf.sh ${ENV} destroy ${@:2}
+    terraform destroy
     
 elif [[ " ${ACT} " =~ " deploy " ]]; then
     
