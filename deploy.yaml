@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: playground-sample-golang-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: golang-api
+  template:
+    metadata:
+      labels:
+        app: golang-api
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: golang-api
+        image: crrvaj82.azurecr.io/rvajustin/sample-golang-api:latest
+        ports:
+        - containerPort: 8080
+          name: golang-api
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: golang-api
+spec:
+  ports:
+  - port: 8080
+  selector:
+    app: golang-api
