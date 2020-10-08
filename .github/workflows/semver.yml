@@ -2,12 +2,12 @@
 name: Release
 
 on:
+  push:
+    branches: [ master ]
   pull_request:
+    branches: [ master ]
     types: 
      - closed
-  push:
-    branches:
-    - $default-branch
 
 jobs:
   build:
