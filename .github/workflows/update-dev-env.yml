@@ -1,10 +1,13 @@
 name: 'Terraform'
 
-# on:
-#   push:
-#     branches:
-#     - $default-branch
-#   pull_request:
+on:
+  release:
+    # Only use the types keyword to narrow down the activity types that will trigger your workflow.
+    types: [published, created, edited]
+  # push:
+  #   branches:
+  #   - $default-branch
+  # pull_request:
 
 env:
   ENV: dev
