@@ -1,11 +1,10 @@
-# .github/workflows/release.yml
-name: Release
+name: Semver
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
     types: 
      - closed
 
