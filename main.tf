@@ -32,6 +32,10 @@ variable "password" {
     type = string
 }
 
+variable "containers" {
+    type = list(object({fullName=string, appName=string, containerRegistry=string, repositoryName=string, tag=string, port=number}))
+}
+
 variable "owner" {
     type = string
     default = "me@rvajustin.com"

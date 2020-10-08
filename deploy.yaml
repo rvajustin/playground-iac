@@ -1,144 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: playground-sample-golang-api
+  name: ${NAME}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: golang-api
+      app: ${APP}
   template:
     metadata:
       labels:
-        app: golang-api
+        app: ${APP}
     spec:
       nodeSelector:
         "beta.kubernetes.io/os": linux
       containers:
-      - name: golang-api
-        image: crrvaj82.azurecr.io/rvajustin/sample-golang-api:latest
+      - name: ${APP}
+        image: ${CR}/${REPO}:${TAG}
         ports:
-        - containerPort: 8080
-          name: golang-api
+        - containerPort: ${PORT}
+          name: ${APP}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: golang-api
+  name: ${APP}
 spec:
   ports:
-  - port: 8080
+  - port: ${PORT}
   selector:
-    app: golang-api
----
-
-
-
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: playground-sample-python-flask-api
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: py-flask-api
-  template:
-    metadata:
-      labels:
-        app: py-flask-api
-    spec:
-      nodeSelector:
-        "beta.kubernetes.io/os": linux
-      containers:
-      - name: py-flask-api
-        image: crrvaj82.azurecr.io/rvajustin/sample-python-flask-api:latest
-        ports:
-        - containerPort: 8080
-          name: py-flask-api
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: py-flask-api
-spec:
-  ports:
-  - port: 8080
-  selector:
-    app: py-flask-api
----
-
-
-
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: playground-sample-vlang-api
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: vlang-api
-  template:
-    metadata:
-      labels:
-        app: vlang-api
-    spec:
-      nodeSelector:
-        "beta.kubernetes.io/os": linux
-      containers:
-      - name: vlang-api
-        image: crrvaj82.azurecr.io/rvajustin/sample-vlang-api:latest
-        ports:
-        - containerPort: 8080
-          name: vlang-api
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: vlang-api
-spec:
-  ports:
-  - port: 8080
-  selector:
-    app: vlang-api
----
-
-
-
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: playground-sample-nodejs-api
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: nodejs-api
-  template:
-    metadata:
-      labels:
-        app: nodejs-api
-    spec:
-      nodeSelector:
-        "beta.kubernetes.io/os": linux
-      containers:
-      - name: nodejs-api
-        image: crrvaj82.azurecr.io/rvajustin/sample-nodejs-express-api:latest
-        ports:
-        - containerPort: 8080
-          name: nodejs-api
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: nodejs-api
-spec:
-  ports:
-  - port: 8080
-  selector:
-    app: nodejs-api
----
+    app: ${APP}

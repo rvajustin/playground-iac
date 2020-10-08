@@ -33,11 +33,7 @@ VARS_FILE="environments/${ENV}/variables.local.json"
 SP=($( jq -r '.appId' ${VARS_FILE} ))
 PASS=($( jq -r '.password' ${VARS_FILE} ))
 TENANT=($( jq -r '.tenant' ${VARS_FILE} ))
-    
-# authenticate with the service principal
-az logout
-az login --service-principal --username ${SP} --password ${PASS} --tenant ${TENANT}
-
+kubectl apply
 if [[ " ${ACT} " =~ " init " ]]; then
     terraform init -backend-config=${BACKEND_FILE} .
     
@@ -45,6 +41,11 @@ elif [[ " ${ACT} " =~ " plan " ]]; then
     terraform plan -var-file=${VARS_FILE} --out main.tfplan
     
 elif [[ " ${ACT} " =~ " apply " ]]; then
+    
+    # authenticate with the service principal
+    # az login --service-principal --username ${SP} --password ${PASS} --tenant ${TENANT}
+
+    # apply terraform plan
     terraform apply main.tfplan 
     az role assignment create --assignee ${SP} --role Contributor --resource-group rg-playground-${ENV}
     
@@ -59,9 +60,30 @@ elif [[ " ${ACT} " =~ " deploy " ]]; then
     # get aks credentials
     az aks get-credentials --resource-group rg-playground-${ENV} --name aks-rvaj82-playground-${ENV}
 
-    # deploy azure containers
-    kubectl apply -f deploy.yaml      
-    
+    # replace variables in ./deploy.yaml and apply kubectl
+    NUM_CONTAINERS=($( jq -r '.containers | length' ${VARS_FILE} ))
+    for n in `seq 1 ${NUM_CONTAINERS}`;
+    do
+        i=$((i-1)) # need the zero-based index
+        
+        NAME=($(    jq -r  ".containers[${i}] | .fullName" ${VARS_FILE} ))
+        APP=($(     jq -r   ".containers[${i}] | .appName" ${VARS_FILE} ))
+        CR=($(      jq -r    ".containers[${i}] | .containerRegistry" ${VARS_FILE} ))
+        REPO=($(    jq -r  ".containers[${i}] | .repositoryName" ${VARS_FILE} ))
+        TAG=($(     jq -r   ".containers[${i}] | .tag" ${VARS_FILE} ))
+        PORT=($(    jq -r  ".containers[${i}] | .port" ${VARS_FILE} ))
+
+        KUBE_DEPLOY_FILE=deploy.yaml
+        eval "cat <<EOF
+$(<${KUBE_DEPLOY_FILE})
+EOF
+" | kubectl apply -f -
+
+    done
+
+    echo "kubectl apply completed"
+
+
 elif [[ " ${ACT} " =~ " delete " ]]; then
     
     # delete k8s resoruce
@@ -70,4 +92,4 @@ elif [[ " ${ACT} " =~ " delete " ]]; then
 fi;
 
 # always logout so as to not impact any other terminal sessions
-az logout
+# az logout

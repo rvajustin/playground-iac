@@ -3,5 +3,15 @@
     "appId": "GUID",
     "password": "string",
     "tenant": "GUID",
-    "subscriptionId": "GUID"
+    "subscriptionId": "GUID",
+    "containers": [
+        {
+            "fullName": "LONG-APP-NAME",
+            "appName": "SHORT-APP-NAME",
+            "containerRegistry": "CONTAINER_REGISTRY_HOSTNAME",
+            "repositoryName": "CONTAINER_REPO",
+            "tag": "latest",
+            "port": 8080
+         }
+    ]
 }
