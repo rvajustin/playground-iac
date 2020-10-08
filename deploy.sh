@@ -33,7 +33,7 @@ VARS_FILE="environments/${ENV}/variables.local.json"
 SP=($( jq -r '.appId' ${VARS_FILE} ))
 PASS=($( jq -r '.password' ${VARS_FILE} ))
 TENANT=($( jq -r '.tenant' ${VARS_FILE} ))
-kubectl apply
+
 if [[ " ${ACT} " =~ " init " ]]; then
     terraform init -backend-config=${BACKEND_FILE} .
     
