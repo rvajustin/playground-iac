@@ -15,7 +15,7 @@ if [[ ! -d "environments/${ENV}" ]]; then
 fi
 
 # validate action
-expected_acts=(init plan apply destroy deploy)
+expected_acts=(init plan apply destroy deploy delete)
 
 if [[ " ${expected_acts[@]} " =~ " $ACT " ]]; then
     echo "Running ${ACT}..."
@@ -60,6 +60,14 @@ elif [[ " ${ACT} " =~ " deploy " ]]; then
     az aks get-credentials --resource-group rg-playground-${ENV} --name aks-rvaj82-playground-${ENV}
 
     # deploy azure containers
-    kubectl apply -f deploy.yaml       
+    kubectl apply -f deploy.yaml      
+    
+elif [[ " ${ACT} " =~ " delete " ]]; then
+    
+    # delete k8s resoruce
+    az aks delete --name aks-rvaj82-playground-${ENV} --resource-group rg-playground-${ENV} --yes
 
 fi;
+
+# always logout so as to not impact any other terminal sessions
+az logout

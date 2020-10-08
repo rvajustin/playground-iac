@@ -43,30 +43,30 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: python-flask-api
+      app: py-flask-api
   template:
     metadata:
       labels:
-        app: python-flask-api
+        app: py-flask-api
     spec:
       nodeSelector:
         "beta.kubernetes.io/os": linux
       containers:
-      - name: python-flask-api
+      - name: py-flask-api
         image: crrvaj82.azurecr.io/rvajustin/sample-python-flask-api:latest
         ports:
         - containerPort: 8080
-          name: python-flask-api
+          name: py-flask-api
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: python-flask-api
+  name: py-flask-api
 spec:
   ports:
   - port: 8080
   selector:
-    app: python-flask-api
+    app: py-flask-api
 ---
 
 
