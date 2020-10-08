@@ -72,7 +72,7 @@ resource "azurerm_resource_group" "rg" {
   }
 }
 
-# Storage account ################################################################
+# AKS ################################################################
 
 resource "azurerm_kubernetes_cluster" "aks" {
   name                = "aks-${local.globalPrefix}"
